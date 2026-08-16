@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Namlok's 18th Birthday 🎀</title>
+<style>
+  *{box-sizing:border-box}
+  body{
+    margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;
+    background:linear-gradient(135deg,#f7efff,#fff7fb,#f1f7ff);
+    color:#4b3b55;min-height:100vh;overflow-x:hidden;
+  }
+  .sparkle{position:fixed;inset:0;pointer-events:none;opacity:.45;
+    background-image:radial-gradient(#fff 1px,transparent 1px);
+    background-size:32px 32px;
+  }
+  .page{max-width:900px;margin:auto;padding:28px 18px 60px;text-align:center}
+  .hero{padding:45px 18px 25px}
+  .tiny{letter-spacing:4px;text-transform:uppercase;font-size:12px;opacity:.7}
+  h1{font-size:clamp(42px,10vw,78px);margin:10px 0 4px;
+     background:linear-gradient(90deg,#8c63c7,#d77bb4,#6e8edb);
+     -webkit-background-clip:text;color:transparent}
+  .subtitle{font-size:18px;margin:0 auto 22px;max-width:600px}
+  .countdown{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:20px 0}
+  .time{background:#ffffffaa;border:1px solid #fff;border-radius:18px;padding:10px 14px;
+        min-width:72px;box-shadow:0 8px 25px #8c63c720}
+  .time b{display:block;font-size:22px}.time span{font-size:11px;opacity:.65}
+  .open{border:0;border-radius:999px;padding:15px 25px;font-size:16px;font-weight:700;
+        cursor:pointer;background:#fff;box-shadow:0 10px 30px #8c63c730;color:#6e4e82}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:14px;margin-top:25px}
+  .box{border:0;border-radius:22px;padding:22px 10px;background:#ffffffc7;
+       box-shadow:0 8px 25px #8c63c718;cursor:pointer;min-height:145px;
+       transition:.25s;position:relative;color:#5d4968}
+  .box:hover{transform:translateY(-5px) rotate(-1deg)}
+  .box.locked .gift{font-size:40px}.box.opened{background:#fff}
+  .num{font-size:12px;opacity:.55}.label{font-weight:700;margin-top:8px}
+  .hint{font-size:12px;opacity:.55;margin-top:5px}
+  .modal{position:fixed;inset:0;background:#35283e99;display:none;align-items:center;
+         justify-content:center;padding:20px;z-index:10}
+  .modal.show{display:flex}
+  .card{max-width:620px;width:100%;background:#fff;border-radius:30px;padding:30px 24px;
+        box-shadow:0 20px 70px #0003;animation:pop .25s ease}
+  @keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+  .card .emoji{font-size:52px}.card h2{margin:10px 0}.card p{line-height:1.65}
+  .close{margin-top:15px;border:0;border-radius:999px;padding:11px 20px;cursor:pointer;
+         background:#f0e5fa;color:#5d4968;font-weight:700}
+  footer{margin-top:35px;font-size:13px;opacity:.6}
+  .burst{position:fixed;inset:0;pointer-events:none;z-index:20}
+  .heart{position:absolute;animation:fall 1.8s ease-out forwards;font-size:22px}
+  @keyframes fall{to{transform:translateY(100vh) rotate(360deg);opacity:0}}
+</style>
+</head>
+<body>
+<div class="sparkle"></div>
+<div class="page">
+  <section class="hero">
+    <div class="tiny">a tiny digital surprise made with love</div>
+    <h1>Namlok's 18th 🎀</h1>
+    <p class="subtitle">18 surprises. One very special person. Welcome to your birthday era. 💗</p>
+    <div class="countdown" id="countdown"></div>
+    <button class="open" onclick="scrollToBoxes()">🎁 Open the surprise box</button>
+  </section>
+
+  <div id="boxes" class="grid"></div>
+  <footer>Made especially for Namlok • happy 18th birthday ♡</footer>
+</div>
+
+<div class="modal" id="modal" onclick="outside(event)">
+  <div class="card">
+    <div class="emoji" id="mEmoji"></div>
+    <h2 id="mTitle"></h2>
+    <p id="mText"></p>
+    <button class="close" onclick="closeModal()">Close ♡</button>
+  </div>
+</div>
+<div class="burst" id="burst"></div>
+<details>
+  <summary>
+    <small>BOX 1 / 18</small>
+    <strong>💌</strong>
+    <b>A Little Birthday Message</b>
+  </summary>
+
+  <div class="inside">
+    <h2>Happy 18th, Namlok! 🎀💗</h2>
+
+    <p>
+      I’m really happy that I got to know you.
+      Even though we’ve been friends for less than a year,
+      we’ve already made so many random, funny, and special memories. 🥹
+    </p>
+
+    <p>
+      I hope this new chapter brings you beautiful memories,
+      new experiences, lots of laughter, and everything you’re wishing for. 🎂✨
+    </p>
+
+    <p>
+      Happy 18th birthday! 💗
+      Now… go open the next box. 👀🎁
+    </p>
+  </div>
+</details>
+<script>
+const surprises = [
+  ["💌","Birthday Letter","Namlok, "],
+  ["<details>
+  <summary>
+    <small>BOX 2 / 18</small>
+    <strong>🐨</strong>
+    <b>RM’s Little Corner</b>
+  </summary>
+
+  <div class="inside">
+    <h2>Welcome to your tiny RM corner! 🐨💜</h2>
+
+    <p>
+      Obviously RM had to be part of your birthday surprise. 😂💜
+    </p>
+
+    <p>
+      A little corner for your RM fan era:
+      good music, peaceful moments, deep thoughts,
+      and a little bit of Namjoon energy. ✨
+    </p>
+
+    <p>
+      And remember… when life gets confusing,
+      just take a deep breath and enjoy your little moment. 🌿💜
+    </p>
+
+    <p>
+      <b>RM section unlocked! 🐨🏆</b>
+    </p>
+
+    <a
+      class="btn"
+      href="https://open.spotify.com/search/RM%20Come%20Back%20to%20Me"
+      target="_blank">
+      🎧 Play RM
+    </a>
+  </div>
+</details>],
+  [""],<details>
+  <summary>
+    <small>BOX 3 / 18</small>
+    <strong>🐶</strong>
+    <b>Martin’s Little Corner</b>
+  </summary>
+
+  <div class="inside">
+    <h2>Welcome to Martin’s Corner! 🐶💗</h2>
+
+    <p>
+      Okay… we obviously needed a little Martin moment in here. 😂
+    </p>
+
+    <p>
+      Because somehow your birthday gift cannot be complete
+      without a little CORTIS energy. ✨
+    </p>
+
+    <p>
+      So here’s your official Martin box:
+      a tiny bit of chaos, a lot of cuteness,
+      and maximum CORTIS vibes. 🐶🎀
+    </p>
+
+    <p>
+      <b>Martin has officially entered the birthday website. 😭💗</b>
+    </p>
+  </div>
+</details>
+  ["<details>
+  <summary>
+    <small>BOX 4 / 18</small>
+    <strong>🏠</strong>
+    <b>Welcome to the BTS House</b>
+  </summary>
+
+  <div class="inside">
+    <h2>🏠 Welcome to the BTS House! 💜</h2>
+
+    <p>
+      You already made a BTS house in the game,
+      so obviously we had to bring the idea into your birthday gift. 😂💜
+    </p>
+
+    <p>
+      🛋️ Living room — for maximum chaos.<br>
+      🍜 Kitchen — where the snacks mysteriously disappear.<br>
+      🎤 Music room — where the playlist is always BTS.<br>
+      🛏️ Your room — because it’s your birthday. 🎀
+    </p>
+
+    <p>
+      <b>House rule #1: BTS music is always allowed. 💜</b>
+    </p>
+
+    <p>
+      <b>House rule #2: No boring conversations allowed. 😂</b>
+    </p>
+
+    <p>
+      Welcome home, Namlok. 🏠💗
+    </p>
+  </div>
+</details>"],
+  ["<details>
+  <summary>
+    <small>BOX 5 / 18</small>
+    <strong>😂</strong>
+    <b>Our Random Conversations</b>
+  </summary>
+
+  <div class="inside">
+    <h2>😂 The most random conversations ever</h2>
+
+    <p>
+      I genuinely don't know how we can start talking about one thing
+      and somehow end up talking about something completely different. 😭
+    </p>
+
+    <p>
+      We laugh at the most random and stupid things,
+      and somehow they're always 10x funnier when we're together. 😂
+    </p>
+
+    <p>
+      Sometimes we talk seriously, sometimes we just say nonsense,
+      and sometimes we don't even need a reason to laugh. 💗
+    </p>
+
+    <p>
+      <b>
+        Honestly, I hope we never run out of random things to talk about. 🫶🏻🎀
+      </b>
+    </p>
+  </div>
+</details>"],
+  ["<details>
+  <summary>
+    <small>BOX 6 / 18</small>
+    <strong>🌷</strong>
+    <b>18 Little Wishes</b>
+  </summary>
+
+  <div class="inside">
+    <h2>🌷 18 wishes for your 18th</h2>
+
+    <p>💗 I wish you happiness.</p>
+    <p>✨ I wish you beautiful memories.</p>
+    <p>🎀 I wish you lots of reasons to smile.</p>
+    <p>🌙 I wish you peaceful nights.</p>
+    <p>🎧 I wish you songs that become special memories.</p>
+    <p>💜 I wish you many BTS moments to make you happy.</p>
+    <p>😂 I wish you endless reasons to laugh.</p>
+    <p>🫶🏻 I wish you people who truly understand you.</p>
+    <p>🌸 I wish you new experiences.</p>
+    <p>⭐ I wish you confidence in yourself.</p>
+    <p>🎂 I wish you the best birthday ever.</p>
+
+    <p>
+      And most importantly…
+      <b>I wish your 18th year becomes a chapter you'll always remember. 💗</b>
+    </p>
+  </div>
+</details>"],
+  ["<details>
+  <summary>
+    <small>BOX 7 / 18</small>
+    <strong>🫶🏻</strong>
+    <b>Our Little Safe Space</b>
+  </summary>
+
+  <div class="inside">
+    <h2>🫶🏻 A little place to just be yourself</h2>
+
+    <p>
+      One of my favorite things about our friendship
+      is that we can actually talk to each other.
+    </p>
+
+    <p>
+      Sometimes we laugh about the most random things,
+      and sometimes we just need to vent about whatever is going on.
+    </p>
+
+    <p>
+      And somehow, we understand each other.
+      No complicated explanations needed. 🥹💗
+    </p>
+
+    <p>
+      <b>
+        I'm really glad we became friends,
+        and I hope you'll always know that you can be yourself around me. 🎀
+      </b>
+    </p>
+  </div>
+</details>"],
+  ["<details>
+  <summary>
+    <small>BOX 8 / 18</small>
+    <strong>🎧</strong>
+    <b>Your K-Pop Emergency Kit</b>
+  </summary>
+
+  <div class="inside">
+    <h2>🚨 K-Pop Emergency Kit 🎧</h2>
+
+    <p>
+      Feeling bored? 😐<br>
+      Open Spotify. 🎧
+    </p>
+
+    <p>
+      Feeling sad? 🥲<br>
+      Put on your favorite song and pretend you're in a music video. 😂
+    </p>
+
+    <p>
+      Need motivation? 💪🏻<br>
+      BTS playlist. Immediately. 💜
+    </p>
+
+    <p>
+      Having a bad day? 😭<br>
+      Congratulations, you've officially been prescribed
+      <b>one hour of K-pop and absolutely no responsibilities.</b> 😂🎀
+    </p>
+
+    <p>
+      <b>Emergency kit status: ALWAYS READY. 💿💗</b>
+    </p>
+  </div>
+</details>
+   ["<details>
+  <summary>
+    <small>BOX 9 / 18</small>
+    <strong>😂</strong>
+    <b>The Little Things</b>
+  </summary>
+
+  <div class="inside">
+    <h2>😂 It's always the little things</h2>
+
+    <p>
+      Somehow, the things we laugh about are usually
+      the most random and pointless things ever. 😭
+    </p>
+
+    <p>
+      A stupid joke, one random sentence,
+      or something that shouldn't even be funny...
+      and suddenly we're both laughing. 😂
+    </p>
+
+    <p>
+      Those tiny moments might seem insignificant,
+      but they're honestly some of my favorite memories. 🥹💗
+    </p>
+
+    <p>
+      <b>
+        Here's to many more stupid jokes,
+        random conversations, and uncontrollable laughing. 🎀😂
+      </b>
+    </p>
+  </div>
+</details>"],
+  ["<details>
+  <summary>
+    <small>BOX 10 / 18</small>
+    <strong>👑</strong>
+    <b>Welcome to 18</b>
+  </summary>
+
+  <div class="inside">
+    <h2>👑 Welcome to your 18th era!</h2>
+
+    <p>
+      Congratulations! 🎉
+      You have officially unlocked a brand-new level:
+      <b>LEVEL 18</b>. 🎂
+    </p>
+
+    <p>
+      ✨ New age unlocked.<br>
+      🎀 New memories loading...<br>
+      💜 BTS content still required.<br>
+      😂 Random conversations still unlimited.
+    </p>
+
+    <p>
+      <b>New achievement:</b><br>
+      Survived 17 years and somehow made it this far. 🏆😭
+    </p>
+
+    <p>
+      Your next mission:
+      <b>Make this year unforgettable. 🌷✨</b>
+    </p>
+
+    <p>
+      Good luck, birthday girl. 👑💗
+    </p>
+  </div>
+</details>"],
+  ["<details>
+  <summary>
+    <small>BOX 11 / 18</small>
+    <strong>🎲</strong>
+    <b>Pick One!</b>
+  </summary>
+
+  <div class="inside">
+    <h2>🎲 Okay… difficult choices! 😂</h2>
+
+    <p>
+      You have to choose one from each pair. No cheating! 👀
+    </p>
+
+    <p>
+      💜 <b>BTS concert</b> OR 🎤 <b>Meet your favorite idol</b>
+    </p>
+
+    <p>
+      🎧 <b>Listen to one song forever</b> OR 📱 <b>Never listen to music again</b>
+    </p>
+
+    <p>
+      😂 <b>Laugh for no reason</b> OR 🤐 <b>Never laugh at stupid jokes again</b>
+    </p>
+
+    <p>
+      🌙 <b>Stay up all night talking</b> OR ☀️ <b>Wake up super early</b>
+    </p>
+
+    <p>
+      🏠 <b>Stay home all day</b> OR ✈️ <b>Travel somewhere new</b>
+    </p>
+
+    <p>
+      <b>And yes… you actually have to choose. 😭😂</b>
+    </p>
+  </div>
+</details>
+  ["<details>
+  <summary>
+    <small>BOX 12 / 18</small>
+    <strong>📸</strong>
+    <b>Memory Lane</b>
+  </summary>
+
+  <div class="inside">
+    <h2>📸 Little moments, big memories</h2>
+
+    <p>
+      We haven't known each other for that long,
+      but somehow we've already collected so many little moments. 🥹
+    </p>
+
+    <p>
+      The random conversations, the stupid jokes,
+      the times we vented to each other,
+      and all the moments where we somehow understood each other. 💗
+    </p>
+
+    <p>
+      Maybe they're small things,
+      but sometimes the smallest moments become the ones we remember the most. 🎀
+    </p>
+
+    <p>
+      <b>
+        Here's to all the memories we've already made
+        and all the ones waiting for us. 🫶🏻✨
+      </b>
+    </p>
+  </div>
+</details>"],
+  ["<details>
+  <summary>
+    <small>BOX 13 / 18</small>
+    <strong>👑</strong>
+    <b>Namlok Character Card</b>
+  </summary>
+
+  <div class="inside">
+    <h2>👑 NAMLOK — CHARACTER CARD</h2>
+
+    <p>
+      <b>✨ Character:</b> Namlok
+    </p>
+
+    <p>
+      <b>🎂 Current level:</b> 18
+    </p>
+
+    <p>
+      <b>😂 Special skill:</b>
+      Turning the most random conversation into something hilarious.
+    </p>
+
+    <p>
+      <b>💬 Favorite activity:</b>
+      Random conversations + talking about absolutely everything.
+    </p>
+
+    <p>
+      <b>💜 Weakness:</b>
+      BTS and anything K-pop related. 😂
+    </p>
+
+    <p>
+      <b>🫶🏻 Best quality:</b>
+      Being someone who can understand and listen when it matters.
+    </p>
+
+    <p>
+      <b>⭐ New achievement:</b>
+      Unlocked Level 18!
+    </p>
+
+    <p>
+      <b>🎀 Mission:</b>
+      Make this year full of memories worth keeping.
+    </p>
+
+    <p>
+      <b>Character status: 18 & iconic. 👑💗</b>
+    </p>
+  </div>
+</details>"],
+  ["<details>
+  <summary>
+    <small>BOX 14 / 18</small>
+    <strong>💜</strong>
+    <b>BTS Would You Rather?</b>
+  </summary>
+
+  <div class="inside">
+    <h2>💜 Okay… choose wisely! 👀</h2>
+
+    <p>
+      🎤 Sing on stage with BTS
+      <b>OR</b>
+      🎧 Spend a whole day with them behind the scenes?
+    </p>
+
+    <p>
+      🐨 Have a deep conversation with RM
+      <b>OR</b>
+      🐱 Have a chaotic day with SUGA?
+    </p>
+
+    <p>
+      🎶 Choose ONE BTS song to listen to forever
+      <b>OR</b>
+      🎬 Watch BTS content forever but never listen to their songs again?
+    </p>
+
+    <p>
+      😂 Make BTS laugh
+      <b>OR</b>
+      💜 Have BTS make you laugh?
+    </p>
+
+    <p>
+      <b>There are no wrong answers… but I WILL judge your choices. 😭😂</b>
+    </p>
+  </div>
+</details>"],
+  ["<details>
+  <summary>
+    <small>BOX 15 / 18</small>
+    <strong>💗</strong>
+    <b>You Deserve Good Things</b>
+  </summary>
+
+  <div class="inside">
+    <h2>💗 A little reminder for you</h2>
+
+    <p>
+      You deserve people who appreciate you,
+      moments that make you genuinely happy,
+      and memories that make you smile whenever you think about them. 🌷
+    </p>
+
+    <p>
+      You deserve to be surrounded by people
+      who listen to you, understand you,
+      and make you feel comfortable being yourself. 🫶🏻
+    </p>
+
+    <p>
+      And on the days when things don't feel perfect,
+      remember that one bad day doesn't define your whole story. 🌙
+    </p>
+
+    <p>
+      <b>
+        I hope your 18th year gives you more happiness,
+        more laughter, and more beautiful moments than you expect. 🎀✨
+      </b>
+    </p>
+
+    <p>
+      Happy 18th, Namlok. You deserve a beautiful year. 💗🎂
+    </p>
+  </div>
+</details>"],
+  ["<details>
+  <summary>
+    <small>BOX 16 / 18</small>
+    <strong>🔐</strong>
+    <b>Secret Message</b>
+  </summary>
+
+  <div class="inside">
+    <h2>🔐 You found the secret!</h2>
+
+    <p>
+      Okay… this one is a little different. 👀
+    </p>
+
+    <p>
+      We've only been friends for less than a year,
+      but somehow you've already become someone
+      I can laugh with, talk to, and vent to. 🥹💗
+    </p>
+
+    <p>
+      So here's your secret message:
+    </p>
+
+    <p>
+      <b>
+        No matter how random our conversations get,
+        I hope we always have a reason to laugh. 😂🎀
+      </b>
+    </p>
+
+    <p>
+      <b>SECRET CODE: NAMLOK18 ✨</b>
+    </p>
+
+    <p>
+      Keep this code… you might need it later. 👀🔐
+    </p>
+  </div>
+</details>"],
+  ["<details>
+  <summary>
+    <small>BOX 17 / 18</small>
+    <strong>🌟</strong>
+    <b>One Last Thing...</b>
+  </summary>
+
+  <div class="inside">
+    <h2>🌟 Wait… we're almost there!</h2>
+
+    <p>
+      You actually made it through 17 boxes. 😭🎀
+    </p>
+
+    <p>
+      We started with a little birthday message,
+      went through BTS, RM, Martin, random conversations,
+      stupid jokes, memories, and a whole lot of chaos. 😂💜
+    </p>
+
+    <p>
+      And now there's only <b>ONE</b> box left. 👀
+    </p>
+
+    <p>
+      But this one isn't like the others…
+    </p>
+
+    <p>
+      <b>
+        It's the one I saved for last. 🎁💗
+      </b>
+    </p>
+
+    <p>
+      So take a deep breath…
+      and open <b>BOX 18</b>. 🎀✨
+    </p>
+  </div>
+</details>"],
+  ["<details>
+  <summary>
+    <small>BOX 18 / 18 — FINAL</small>
+    <strong>🎁</strong>
+    <b>UR GIFT SONG</b>
+  </summary>
+
+  <div class="inside">
+    <h2>🎁 You made it to the end!</h2>
+
+    <p>
+      Okay… this is it. 🥹💗
+    </p>
+
+    <p>
+      We had 17 songs in the birthday playlist,
+      but I wanted to save <b>one special playlist</b>
+      just for you.
+    </p>
+
+    <p>
+      So this one isn't part of the 17 songs.
+      <br>
+      <b>This one is your gift. 🎧🎀</b>
+    </p>
+
+    <p>
+      I hope whenever you listen to it,
+      it reminds you of this little birthday surprise
+      and all the random memories we've made. 🫶🏻
+    </p>
+
+    <p>
+      <b>
+        Happy 18th birthday, Namlok. 🎂💗
+      </b>
+    </p>
+
+    <p>
+      Now… press the button. 👀
+    </p>
+
+    <a
+      class="btn"
+      href="https://open.spotify.com/playlist/1D0gyWwW02Blz7xx5440mY?si=288SXMb4RqS5YOjFslAmow"
+      target="_blank">
+      🎧 OPEN UR GIFT SONG
+    </a>
+
+    <p>
+      <br>
+      <b>Made especially for you. 🎀💗</b>
+    </p>
+  </div>
+</details>"]
+];
+
+const boxes = document.getElementById("boxes");
+surprises.forEach((s,i)=>{
+  const b=document.createElement("button");
+  b.className="box locked";
+  b.innerHTML=`<div class="num">SURPRISE ${i+1}</div><div class="gift">🎁</div><div class="label">Locked</div><div class="hint">tap to open</div>`;
+  b.onclick=()=>openBox(i,b);
+  boxes.appendChild(b);
+});
+
+function openBox(i,b){
+  b.classList.remove("locked"); b.classList.add("opened");
+  b.innerHTML=`<div class="num">SURPRISE ${i+1}</div><div class="gift">${surprises[i][0]}</div><div class="label">${surprises[i][1]}</div><div class="hint">opened ♡</div>`;
+  document.getElementById("mEmoji").textContent=surprises[i][0];
+  document.getElementById("mTitle").textContent=surprises[i][1];
+  document.getElementById("mText").textContent=surprises[i][2];
+  document.getElementById("modal").classList.add("show");
+  burst();
+}
+function closeModal(){document.getElementById("modal").classList.remove("show")}
+function outside(e){if(e.target.id==="modal")closeModal()}
+function scrollToBoxes(){document.getElementById("boxes").scrollIntoView({behavior:"smooth"})}
+
+function updateCountdown(){
+  const target=new Date("2026-08-19T00:00:00");
+  const now=new Date(); let diff=Math.max(0,target-now);
+  const d=Math.floor(diff/86400000); diff%=86400000;
+  const h=Math.floor(diff/3600000); diff%=3600000;
+  const m=Math.floor(diff/60000); const s=Math.floor((diff%60000)/1000);
+  document.getElementById("countdown").innerHTML =
+    `<div class="time"><b>${d}</b><span>DAYS</span></div>
+     <div class="time"><b>${h}</b><span>HOURS</span></div>
+     <div class="time"><b>${m}</b><span>MIN</span></div>
+     <div class="time"><b>${s}</b><span>SEC</span></div>`;
+}
+updateCountdown(); setInterval(updateCountdown,1000);
+
+function burst(){
+  const el=document.getElementById("burst");
+  for(let i=0;i<18;i++){
+    const h=document.createElement("div"); h.className="heart";
+    h.textContent=["💗","🎀","✨","💜","⭐"][Math.floor(Math.random()*5)];
+    h.style.left=Math.random()*100+"vw"; h.style.top="-30px";
+    h.style.animationDelay=(Math.random()*.4)+"s"; el.appendChild(h);
+    setTimeout(()=>h.remove(),2300);
+  }
+}
+</script>
+</body>
+</html>
