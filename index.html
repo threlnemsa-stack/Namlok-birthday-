@@ -111,16 +111,16 @@ const surprises = [
      <p>So here’s your official Martin box: a tiny bit of chaos, a lot of cuteness, and maximum CORTIS vibes. 🐶🎀</p>`],
   ["🏠","Welcome to the BTS House",
     `<p>🏠 Welcome to the BTS House! 💜</p>
-     <p>🛋️ Living room — for maximum chaos.<br>🍜 Kitchen — where the snacks mysteriously disappear.<br>🎤 Music room — where the playlist is always BTS.<br>🛏️ Your room — bedroom décor that screams fandom.</p>
+     <p>🛋️ Living room — for maximum chaos.<br>🍜 Kitchen — where the snacks mysteriously disappear.<br>🎤 Music room — where the playlist is always BTS.<br>🛏️ Your room — bedroo[...]
      <p>Make yourself at home and queue up your favorite songs.</p>`],
   ["😂","Our Random Conversations",
     `<p>I genuinely don't know how we can start talking about one thing and somehow end up talking about something completely different. 😭</p>
      <p>We laugh at the most random and stupid things, and somehow they're always 10x funnier when we're together. 😂</p>`],
   ["🌷","18 Little Wishes",
-    `<p>💗 I wish you happiness.<br>✨ I wish you beautiful memories.<br>🎀 I wish you lots of reasons to smile.<br>🌙 I wish you peaceful nights.<br>🎧 I wish you songs that become special to you.</p>
+    `<p>💗 I wish you happiness.<br>✨ I wish you beautiful memories.<br>🎀 I wish you lots of reasons to smile.<br>🌙 I wish you peaceful nights.<br>🎧 I wish you songs that become spec[...]
      <p><b>I wish your 18th year becomes a chapter you'll always remember. 💗</b></p>`],
   ["🫶🏻","Our Little Safe Space",
-    `<p>One of my favorite things about our friendship is that we can actually talk to each other. Sometimes we laugh about the most random things, and sometimes we just need to vent. No complications — just honesty and care.</p>
+    `<p>One of my favorite things about our friendship is that we can actually talk to each other. Sometimes we laugh about the most random things, and sometimes we just need to vent. No complica[...]
      <p>Thank you for being someone I can share silly moments and serious ones with. 🫶🏻</p>`],
   ["🎧","Your K-Pop Emergency Kit",
     `<p>Feeling bored? Open Spotify. 🎧<br>Feeling sad? Put on your favorite song and pretend you're in a music video. 😂</p>
@@ -285,6 +285,32 @@ function openBox(index, btn) {
     hint.style.fontSize = '13px';
     hint.textContent = 'Tip: press play inside the player to start the track.';
     mExtra.appendChild(hint);
+
+    modal.classList.add('show');
+    lastFocusedBox = btn;
+    setTimeout(()=> mClose.focus(), 10);
+    burst();
+    return;
+  }
+
+  if (index === 2) {
+    // Add Spotify embed for Martin's track (user-provided Spotify URL)
+    const martinTrackId = '2fCwv2ppU5nTRTckomIGsd'; // provided track ID from the URL
+    const embed = createSpotifyEmbed('track', martinTrackId);
+    mExtra.appendChild(embed);
+
+    // lazy-load the iframe src now that user has interacted
+    setTimeout(()=> {
+      const iframe = embed.querySelector('iframe');
+      if (iframe && iframe.dataset.spotifySrc) iframe.src = iframe.dataset.spotifySrc;
+    }, 50);
+
+    const hint2 = document.createElement('div');
+    hint2.style.marginTop = '8px';
+    hint2.style.opacity = '.85';
+    hint2.style.fontSize = '13px';
+    hint2.textContent = 'Tip: press play inside the player to start the track.';
+    mExtra.appendChild(hint2);
 
     modal.classList.add('show');
     lastFocusedBox = btn;
