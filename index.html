@@ -111,15 +111,15 @@ const surprises = [
      <p>So here’s your official Martin box: a tiny bit of chaos, a lot of cuteness, and maximum CORTIS vibes. 🐶🎀</p>`],
   ["🏠","Welcome to the BTS House",
     `<p>🏠 Welcome to the BTS House! 💜</p>
-     <p>🛋️ Living room — for maximum chaos.<br>🍜 Kitchen — where the snacks mysteriously disappear.<br>🎤 Music room — where the playlist is always BTS.<br>🛏️ Your room — because it’s your birthday. 🎀</p>`],
+     <p>🛋️ Living room — for maximum chaos.<br>🍜 Kitchen — where the snacks mysteriously disappear.<br>🎤 Music room — where the playlist is always BTS.<br>🛏️ Your room — b[...]
   ["😂","Our Random Conversations",
     `<p>I genuinely don't know how we can start talking about one thing and somehow end up talking about something completely different. 😭</p>
      <p>We laugh at the most random and stupid things, and somehow they're always 10x funnier when we're together. 😂</p>`],
   ["🌷","18 Little Wishes",
-    `<p>💗 I wish you happiness.<br>✨ I wish you beautiful memories.<br>🎀 I wish you lots of reasons to smile.<br>🌙 I wish you peaceful nights.<br>🎧 I wish you songs that become special memories.<br>💜 I wish you many BTS moments to make you happy.<br>😂 I wish you endless reasons to laugh.<br>🫶🏻 I wish you people who truly understand you.<br>🌸 I wish you new experiences.<br>⭐ I wish you confidence in yourself.<br>🎂 I wish you the best birthday ever.</p>
+    `<p>💗 I wish you happiness.<br>✨ I wish you beautiful memories.<br>🎀 I wish you lots of reasons to smile.<br>🌙 I wish you peaceful nights.<br>🎧 I wish you songs that become spec[...]
      <p><b>I wish your 18th year becomes a chapter you'll always remember. 💗</b></p>`],
   ["🫶🏻","Our Little Safe Space",
-    `<p>One of my favorite things about our friendship is that we can actually talk to each other. Sometimes we laugh about the most random things, and sometimes we just need to vent. No complicated explanations needed. 🥹💗</p>`],
+    `<p>One of my favorite things about our friendship is that we can actually talk to each other. Sometimes we laugh about the most random things, and sometimes we just need to vent. No complica[...]
   ["🎧","Your K-Pop Emergency Kit",
     `<p>Feeling bored? Open Spotify. 🎧<br>Feeling sad? Put on your favorite song and pretend you're in a music video. 😂</p>
      <p>Need motivation? BTS playlist. Immediately. 💜</p>`],
@@ -151,7 +151,7 @@ const surprises = [
     `<p>You've found the secret box. Type the secret code to unlock your special surprise.</p>`],
   ["🌟","One Last Thing...",
     `<p>You actually made it through 17 boxes. 😭🎀</p>
-     <p>We started with a little birthday message and went through BTS, RM, Martin, random conversations, and memories. Now there's only <b>ONE</b> box left — the one I saved for last. 🎁💗</p>`],
+     <p>We started with a little birthday message and went through BTS, RM, Martin, random conversations, and memories. Now there's only <b>ONE</b> box left — the one I saved for last. 🎁💗[...]
   ["🎁","UR GIFT SONG",
     `<p>We had 17 songs in the birthday playlist, but I wanted to save <b>one special playlist</b> just for you. This one is your gift. 🎧🎀</p>
      <p>Press Play now to hear a demo (replace with real MP3 to play your song).</p>`]
@@ -261,36 +261,27 @@ function openBox(index, btn) {
 
   // Special handling: index 1 (RM) and index 17 (Gift) — add Play now buttons using HTMLAudio
   if (index === 1) {
-    // Optional Spotify embed (comment out if not needed). Replace id if you have a Spotify track
-    // const rmTrackOrPlaylistId = '3xWQ6d2z4g4yF0bqF3x0Vx'; // placeholder
-    // const embed = createSpotifyEmbed('track', rmTrackOrPlaylistId);
-    // mExtra.appendChild(embed);
-    // lazy-load embed if present:
-    // setTimeout(()=> { const i = embed.querySelector('iframe'); if(i && i.dataset.spotifySrc) i.src = i.dataset.spotifySrc; }, 50);
+    // Use Spotify embed for the user-provided track. Spotify does not provide a direct MP3 URL,
+    // so we embed the Spotify player. The iframe requires the user to press Play inside the player
+    // (browsers and Spotify disallow cross-origin autoplay). We lazy-load the embed on user click so
+    // the player is available immediately inside the modal.
+    const rmTrackId = '1sKsYTGy8XfHjCYqcudqG5'; // provided Spotify track ID
+    const embed = createSpotifyEmbed('track', rmTrackId);
+    mExtra.appendChild(embed);
 
-    // Play now button
-    const playBtn = document.createElement('button');
-    playBtn.className = 'btn';
-    playBtn.textContent = 'Play now';
-    let localAudio = null;
-    function updateLabel() {
-      playBtn.textContent = (localAudio && !localAudio.paused) ? 'Pause' : 'Play now';
-    }
-    playBtn.addEventListener('click', () => {
-      if (!localAudio) {
-        // start playback using demo RM mp3 (replace demoRmMp3 with your own file URL)
-        localAudio = audioManager.play(demoRmMp3, () => { localAudio = null; updateLabel(); });
-        updateLabel();
-      } else if (!localAudio.paused) {
-        localAudio.pause();
-        updateLabel();
-      } else {
-        // resume
-        localAudio.play().then(()=>updateLabel()).catch(err=>console.warn(err));
-      }
-      // ensure audioManager.current is this localAudio reference
-    });
-    mExtra.appendChild(playBtn);
+    // lazy-load the iframe src now that user has interacted
+    setTimeout(()=> {
+      const iframe = embed.querySelector('iframe');
+      if (iframe && iframe.dataset.spotifySrc) iframe.src = iframe.dataset.spotifySrc;
+    }, 50);
+
+    // Also include an "Open in Spotify" link (already added by createSpotifyEmbed) and a small hint
+    const hint = document.createElement('div');
+    hint.style.marginTop = '8px';
+    hint.style.opacity = '.85';
+    hint.style.fontSize = '13px';
+    hint.textContent = 'Tip: press play inside the player to start the track.';
+    mExtra.appendChild(hint);
 
     modal.classList.add('show');
     lastFocusedBox = btn;
